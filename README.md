@@ -54,19 +54,24 @@ Never commit `.env` or `.streamlit/secrets.toml`. The app does not display the k
 
 ## Deploy to Streamlit Community Cloud
 
-1. Push the project to a GitHub repository. The three inference model weights are included so the deployed app does not need to fetch them at startup. Do not commit `.env`, `.streamlit/secrets.toml`, databases, user uploads, raw datasets, training checkpoints, or virtual environments.
-2. In Streamlit Community Cloud, choose **Create app**, select the repository and branch, and set the main file to `streamlit_app.py`.
-3. Use Python 3.11 in the app's advanced settings when available. Ensure the deployment has enough memory for PyTorch and both image models; a 2 GB or larger memory instance is recommended, especially when using fruit detection. Smaller instances may be unable to load the models.
-4. Add optional API credentials in the app's **Settings → Secrets** using TOML:
+The GitHub repository is public and the app entry point is `streamlit_app.py`. To create the hosted app:
+
+1. Sign in to [Streamlit Community Cloud](https://share.streamlit.io/) with the GitHub account that owns or administers [this repository](https://github.com/Anushkahiremath/Intellifresh-AI).
+2. Select **Create app** → **Yup, I have an app**.
+3. Choose repository `Anushkahiremath/Intellifresh-AI`, branch `main`, and main file path `streamlit_app.py`. Optionally choose an available custom `streamlit.app` subdomain.
+4. Open **Advanced settings**. Select **Python 3.11** and, only if you want Gemini-powered guidance, enter the optional secret:
 
    ```toml
    GEMINI_API_KEY = "your_key_here"
    ```
 
-5. Deploy and wait for the first model downloads to finish. First startup requires outbound access to Hugging Face and PyTorch's model host. Try **Reboot app** if initial downloads were interrupted.
-6. Test image upload, produce recognition, fruit counting, batch review, and report downloads on the deployed URL.
+   Leave Secrets empty to use the local guidance fallback. Never enter a key in a source file, GitHub issue, or committed `.env`.
+5. Select **Save** → **Deploy**. The first build installs the requirements and downloads the repository, including its model files. Allow several minutes for the initial build and model initialization.
+6. When the app reports that it is running, verify image upload, produce recognition, fruit counting, batch review, and report downloads using the generated `streamlit.app` URL. Use the Cloud app's **Manage app** logs if build or startup fails.
 
-The detector checkpoint is a large GitHub file, so a fresh clone and Streamlit Cloud build take longer than a source-only app. The bundled weights avoid repeat downloads after deployment. If the deployment host has insufficient memory, use a host with adequate RAM or configure the model services to load from your own approved artifact store.
+The committed model weights mean normal startup does not need to fetch classifier or detector checkpoints from Hugging Face or PyTorch. The repository is about 100 MB; the 74 MB detector weight exceeds GitHub's 50 MB recommendation (GitHub warns, but accepts it below the 100 MB per-file limit), so a fresh clone/build takes longer. CPU inference is supported. If the host runs out of memory or terminates the app, use a host with more memory or move inference to a separately hosted model service.
+
+I cannot create the Cloud app on your behalf from this workspace: Streamlit Community Cloud requires an interactive sign-in, an owner/admin-authorized GitHub connection, and acceptance of its deployment settings. The steps above are the remaining one-time account actions.
 
 ## Model and evaluation files
 
