@@ -1,0 +1,30 @@
+{% extends 'base.html' %}{% block title %}Analyze · FreshVision AI{% endblock %}{% block content %}
+<div class="container page-pad">
+  <div class="section-title text-center">
+    <small>AI ANALYSIS</small>
+    <h1>Analyze freshness</h1>
+    <p>Upload one supported fruit or vegetable image.</p>
+  </div>
+
+  <div class="upload-card mx-auto">
+    <form method="post" enctype="multipart/form-data" class="analysis-form">
+      <label class="drop-area" for="image">
+        <input id="image" name="image" type="file" accept="image/jpeg,image/png,image/webp" required hidden>
+        <div id="emptyPreview">
+          <i class="bi bi-cloud-arrow-up"></i>
+          <h4>Drop an image or click to browse</h4>
+          <p>JPG, JPEG, PNG, WEBP · maximum 10 MB</p>
+        </div>
+        <img id="imagePreview" hidden alt="Selected image preview">
+      </label>
+      <div class="upload-meta"><i class="bi bi-shield-check"></i> Freshness model validation</div>
+      <button class="btn btn-success btn-lg w-100 mt-4" {% if not model.available %}disabled{% endif %}>Analyze Freshness</button>
+      <div class="loading-state mt-3" hidden><span class="spinner-border spinner-border-sm"></span> Analyzing image... Running MobileNetV2 inference...</div>
+    </form>
+
+    {% if not model.available %}
+      <div class="alert alert-warning mt-4 mb-0">{{ model.load_error }}</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.log
+*.pid
+.DS_Store
+
+# Local credentials and deployment secrets
+.env
+.env.*
+!.env.example
+.streamlit/secrets.toml
+.streamlit/credentials.toml
+
+# Local databases, uploads, results, datasets, and temporary downloads
+instance/
+*.db
+*.db-*
+*.sqlite*
+uploads/*
+!uploads/.gitkeep
+static/uploads/
+static/results/
+data/
+raw_data/
+Quality Dataset/
+temp/
+tmp/
+
+# Keep only the pretrained models required by the deployed app
+models/*.pth
+!models/freshness_mobilenetv2_state_dict.pth
+!models/produce_efficientnet_b0.pth
+!models/fruit_detector_mobilenet_v3_large_fpn.pth
+models/.cache/
+
+# Keep the compact evaluation data shown in the performance tab
+artifacts/*
+!artifacts/freshness/
+artifacts/freshness/*
+!artifacts/freshness/baseline_validation.json
+!artifacts/freshness/history.json

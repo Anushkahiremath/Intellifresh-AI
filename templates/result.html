@@ -1,0 +1,67 @@
+{% extends 'base.html' %}{% block title %}Result · FreshVision AI{% endblock %}{% block content %}
+<div class="container page-pad">
+  <div class="d-print-none mb-4">
+    <a href="{{ url_for('analyze') }}" class="text-decoration-none fw-semibold text-success">← Analyze another image</a>
+  </div>
+
+  <div class="result-shell">
+    <div class="row g-4">
+      <div class="col-lg-5">
+        <img class="result-image" src="{{ url_for('static', filename='uploads/' + analysis['image_filename']) }}" alt="Uploaded sample">
+        {% if analysis['gradcam_filename'] %}
+          <div class="mt-4">
+            <h5 class="mb-3">AI Attention Map</h5>
+            <img class="result-image" src="{{ url_for('static', filename='results/' + analysis['gradcam_filename']) }}" alt="Grad-CAM overlay">
+          </div>
+        {% endif %}
+      </div>
+
+      <div class="col-lg-7">
+        <div class="identify-card">
+          <small>DETECTED PRODUCE</small>
+          <h2>{{ analysis['produce_name'] or 'Unavailable' }}</h2>
+          <div class="d-flex flex-wrap align-items-center gap-2 mt-2">
+            <span class="fw-semibold">{{ '%.2f'|format(analysis['produce_confidence'] or 0) }}% identification confidence</span>
+            <span class="badge rounded-pill {{ 'text-bg-success' if analysis['freshness_coverage'] == 'Supported' else 'text-bg-warning' }}">
+              {{ analysis['freshness_coverage'] or 'Unknown' }} freshness coverage
+            </span>
+          </div>
+        </div>
+
+        <div class="status-card {{ analysis['prediction']|lower }} mt-3">
+          <small>FRESHNESS STATUS</small>
+          <h1>{{ analysis['prediction']|upper }}</h1>
+          <strong>{{ '%.2f'|format(analysis['confidence']) }}% Confidence</strong>
+        </div>
+
+        <h4 class="mt-4 mb-3">AI Probability Analysis</h4>
+        <div class="prob-row"><span>Fresh</span><b>{{ '%.2f'|format(analysis['fresh_probability']) }}%</b></div>
+        <div class="progress mb-3"><div class="progress-bar bg-success" style="width:{{ analysis['fresh_probability'] }}%"></div></div>
+        <div class="prob-row"><span>Stale</span><b>{{ '%.2f'|format(analysis['stale_probability']) }}%</b></div>
+        <div class="progress"><div class="progress-bar bg-warning" style="width:{{ analysis['stale_probability'] }}%"></div></div>
+
+        {% if analysis['freshness_coverage'] == 'Experimental' %}
+          <div class="alert alert-warning mt-4 mb-0">
+            Freshness output is experimental for this category because it is outside the six-category freshness training distribution.
+          </div>
+        {% endif %}
+
+        <div class="recommend-box mt-4">
+          <h5>Recommended actions</h5>
+          <p class="mb-2 text-muted">{{ recommendation.summary }}</p>
+          <ul>
+            {% for action in recommendation.actions %}
+              <li>{{ action }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <p class="disclaimer">{{ disclaimer }}</p>
+        <button onclick="window.print()" class="btn btn-outline-success d-print-none mt-2">
+          <i class="bi bi-printer"></i> Print / Save as PDF
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

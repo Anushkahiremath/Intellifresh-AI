@@ -1,0 +1,1 @@
+{% extends 'base.html' %}{% block title %}Error {{ code }} · FreshVision AI{% endblock %}{% block content %}<div class="container page-pad"><div class="empty-state"><strong class="error-code">{{ code }}</strong><h2>{{ message }}</h2><a href="{{ url_for('index') }}" class="btn btn-success">Return home</a></div></div>{% endblock %}

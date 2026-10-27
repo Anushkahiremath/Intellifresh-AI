@@ -1,0 +1,15 @@
+Flask>=3.1,<4
+Werkzeug>=3.1,<4
+torch>=2.4,<3
+torchvision>=0.19,<1
+Pillow>=11,<13
+numpy>=2,<3
+huggingface-hub>=0.27,<2
+gunicorn>=23,<24
+streamlit>=1.41,<2
+pandas>=2.2,<3
+scikit-learn>=1.5,<2
+python-dotenv>=1.0,<2
+requests>=2.32,<3
+reportlab>=4.0
+google-genai>=1.0

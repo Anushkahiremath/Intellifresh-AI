@@ -1,0 +1,28 @@
+{% extends 'base.html' %}{% block title %}Batch · FreshVision AI{% endblock %}{% block content %}
+<div class="container page-pad">
+  <div class="section-title text-center">
+    <small>BATCH ANALYSIS</small>
+    <h1>Analyze up to 10 images</h1>
+  </div>
+
+  <div class="upload-card mx-auto">
+    <form method="post" enctype="multipart/form-data" class="analysis-form">
+      <label class="drop-area" for="images">
+        <input id="images" name="images" type="file" accept="image/jpeg,image/png,image/webp" multiple required hidden>
+        <div>
+          <i class="bi bi-images"></i>
+          <h4>Select multiple images</h4>
+          <p id="fileCount">Maximum 10 images · 10 MB each</p>
+        </div>
+      </label>
+      <div class="upload-meta"><i class="bi bi-collection"></i> Batch inference queue</div>
+      <button class="btn btn-success btn-lg w-100 mt-4" {% if not model.available %}disabled{% endif %}>Run Batch Analysis</button>
+      <div class="loading-state mt-3" hidden><span class="spinner-border spinner-border-sm"></span> Processing batch...</div>
+    </form>
+
+    {% if not model.available %}
+      <div class="alert alert-warning mt-4">{{ model.load_error }}</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
